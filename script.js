@@ -36,6 +36,38 @@ function criarTarefa(texto, concluida = false) {
     span.className = "tituloTarefa";
     span.textContent = texto;
     if (concluida) span.style.textDecoration = "line-through";
+    span.addEventListener("dblclick", () =>{
+        const inputEdit = document.createElement("input");
+        inputEdit.type = "text";
+        inputEdit.value = texto;
+        inputEdit.className = "inputEditar";
+        span.replaceWith(inputEdit);
+        inputEdit.focus();
+
+        inputEdit.addEventListener("keydown", (e) => {
+            if (e.key === "enter") {
+                salvarEdicao();
+            }
+        });
+
+        inputEdit.addEventListener("blur", salvarEdicao);
+
+        function salvarEdicao () {
+            const novoTexto = inputEdit.value.trim();
+            if (novoTexto === ""){
+                inputEdit.replaceWith(span);
+                return;
+            }
+            span.textContent = novoTexto;
+            inputEdit.replaceWith(span);
+
+            tarefas = tarefas.map(t =>
+                t.texto === texto ? {...t, texto: novoTexto} : t
+            );
+            salvarLocalStorage();
+        }
+    });
+
     
     checkbox.addEventListener("change", () => {
         span.style.textDecoration = checkbox.checked ? "line-through" : "none";
@@ -61,6 +93,24 @@ function atualizarTarefa(texto, concluida){
     tarefas = tarefas.map(t =>
         t.texto === texto ? {...t, concluida} : t
     );
+    salvarLocalStorage();
+}
+
+// iniciando o sortable
+new Sortable(lista, {
+    animation: 150,
+    onEnd: function(){
+        ordemNova();
+    }
+});
+
+function ordemNova() {
+    const novasTarefas = [];
+    lista.querySelectorAll(".itemLista").forEach( li => {
+        const texto = li.querySelector(".tituloTarefa").textContent;
+        const concluida = li.querySelector("input[type='checkbox']").checked;
+        novasTarefas.push({texto, concluida});
+    });
     salvarLocalStorage();
 }
 

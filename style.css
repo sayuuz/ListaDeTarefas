@@ -51,7 +51,7 @@ h1 {
     max-height: 300px;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: #03a9f4 #1e1e1e;
+    scrollbar-color: #888 #1e1e1e;
 }
 
 .itemLista {
@@ -96,4 +96,16 @@ h1 {
 
 .btnExcluir:hover {
     background-color: rgba(255, 77, 77, 0.2);
+}
+
+.inputEditar {
+    flex: 1;
+    width: 95%;
+    font-size: 14px;
+    background-color: transparent;
+    color: #E0E0E0;
+    border: none;
+    outline: none;
+    transition: 0.3s;
+    margin-left: 5px;
 }
